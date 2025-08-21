@@ -1,13 +1,22 @@
 # MiniProject
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.6.
+โปรเจคตัวอย่างที่สร้างด้วย Angular 20 (แสดงการใช้ standalone components, services และ HTTP client)
 
-## Development server
+## รูปแบบโปรเจค (สำคัญ)
+- จุดเข้าแอป: [src/main.ts](src/main.ts) (เรียก [`bootstrapApplication`](src/main.ts) กับ [`appConfig`](src/app/app.config.ts))
+- คอมโพเนนต์หลัก: [`App`](src/app/app.ts) — เทมเพลต: [src/app/app.html](src/app/app.html)
+- คอมโพเนนต์รายการพนักงาน: [`Item`](src/app/item/item.ts) — เทมเพลต: [src/app/item/item.html](src/app/item/item.html)
+- เซอร์วิส HTTP: [`employeeService`](src/services/employee.service.ts) ใช้ HTTP client ที่กำหนดใน [src/services/httpsClient.ts](src/services/httpsClient.ts)
+- หน้า HTML หลัก: [src/index.html](src/index.html)
+- สไตล์ global: [src/styles.css](src/styles.css)
 
-To start a local development server, run:
+โครงสร้างไฟล์เต็มอยู่ในโฟลเดอร์ `src/` (ดูไฟล์ตัวอย่างข้างต้น)
 
-```bash
-ng serve
+## ติดตั้งและรัน
+การติดตั้ง dependencies และรันเซิร์ฟเวอร์พัฒนา:
+```sh
+npm install
+npm run start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
