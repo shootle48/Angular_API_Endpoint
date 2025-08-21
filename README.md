@@ -1,68 +1,63 @@
-# MiniProject
+# Mini Project (Angular) — README
 
-โปรเจคตัวอย่างที่สร้างด้วย Angular 20 (แสดงการใช้ standalone components, services และ HTTP client)
+Project overview
+- Simple Angular example app that performs CRUD operations for "employees" against an API endpoint.
+- HTTP client and API logic are separated under `src/services/` (`httpsClient.ts` + `employee.service.ts`).
 
-## รูปแบบโปรเจค (สำคัญ)
-- จุดเข้าแอป: [src/main.ts](src/main.ts) (เรียก [`bootstrapApplication`](src/main.ts) กับ [`appConfig`](src/app/app.config.ts))
-- คอมโพเนนต์หลัก: [`App`](src/app/app.ts) — เทมเพลต: [src/app/app.html](src/app/app.html)
-- คอมโพเนนต์รายการพนักงาน: [`Item`](src/app/item/item.ts) — เทมเพลต: [src/app/item/item.html](src/app/item/item.html)
-- เซอร์วิส HTTP: [`employeeService`](src/services/employee.service.ts) ใช้ HTTP client ที่กำหนดใน [src/services/httpsClient.ts](src/services/httpsClient.ts)
-- หน้า HTML หลัก: [src/index.html](src/index.html)
-- สไตล์ global: [src/styles.css](src/styles.css)
+Repository layout (key files)
+- src/main.ts — application bootstrap
+- src/index.html — host page
+- src/styles.css, src/app/app.css, src/app/item/item.css — styles
+- src/app/app.ts, src/app/app.html — root component
+- src/app/item/item.ts, src/app/item/item.html — item / list component
+- src/services/httpsClient.ts — configured HTTP client (baseURL, headers, interceptors)
+- src/services/employee.service.ts — functions that call the API (GET/POST/PUT/DELETE)
+- src/app/*.spec.ts, src/app/item/*.spec.ts — unit tests
 
-โครงสร้างไฟล์เต็มอยู่ในโฟลเดอร์ `src/` (ดูไฟล์ตัวอย่างข้างต้น)
-
-## ติดตั้งและรัน
-การติดตั้ง dependencies และรันเซิร์ฟเวอร์พัฒนา:
+Install and run (development)
 ```sh
 npm install
 npm run start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Build and tests
+- Build production bundle: npm run build
+- Run unit tests: npm run test
 
-## Code scaffolding
+API usage and endpoints (convention)
+- GET /employees        — list all employees
+- GET /employees/:id    — get employee by id
+- POST /employees       — create a new employee (JSON body)
+- PUT /employees/:id    — update employee by id (JSON body)
+- DELETE /employees/:id — delete employee by id
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+How the app calls the API
+1. Configure the API base URL in src/services/httpsClient.ts (use environment variables for different environments).
+2. Use the exported methods in src/services/employee.service.ts to call endpoints.
+3. Components (e.g., App, Item) import the service and call methods to load, create, update, and delete employees.
 
-```bash
-ng generate component component-name
+Example service API (pattern)
+```ts
+// example: src/services/employee.service.ts
+import http from './httpsClient';
+
+export const getEmployees = () => http.get('/employees');
+export const getEmployee = (id: string|number) => http.get(`/employees/${id}`);
+export const createEmployee = (data: any) => http.post('/employees', data);
+export const updateEmployee = (id: string|number, data: any) => http.put(`/employees/${id}`, data);
+export const deleteEmployee = (id: string|number) => http.delete(`/employees/${id}`);
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+CORS and proxy notes
+- If the browser blocks requests (CORS), enable CORS on the backend or configure a dev proxy (Angular CLI proxy) to avoid CORS during development.
+- For local backends, set baseURL to http://localhost:PORT in httpsClient.ts or use environment configuration.
 
-```bash
-ng generate --help
-```
+Debugging tips
+- Check Network tab in browser devtools for request/response and headers.
+- Inspect console output in VS Code terminal for runtime/build errors.
+- Add logging or error handling in httpsClient interceptors to surface API errors.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Next steps / improvements
+- Add environment-specific config (environments files or env vars).
+- Add form validation and better error UI for CRUD operations.
+- Convert service to return typed observables/promises and add unit tests for API calls.
